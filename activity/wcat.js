@@ -26,7 +26,7 @@ function isFileorNOt(dirpath) {
 for(let i = 0 ; i < filepath.length ; i++){
     let path = filepath[i];
     if(fs.existsSync(path) && isFileorNOt(path)){
-        data += '\n';
+        if(i>0) data += '\n';
         data += fs.readFileSync(path,"utf-8");
     } else{
         console.log("File does not exist")
@@ -58,7 +58,20 @@ console.log(data);
 
 function removeBigLineBreaks(dataArr){
     // console.log("Remove big spaces");
-    return dataArr;
+    let newDataArr = [];
+    for(let i = 0 ; i < dataArr.length ; ){
+        if(dataArr[i] == '\r'){
+            while(dataArr[i] == '\r'){
+                i++;
+            }
+            newDataArr.push('\r');
+        }
+        else{
+            newDataArr.push(dataArr[i]);
+            i++ ;
+        }
+    }
+    return newDataArr;
 }
 
 function giveNumbering(dataArr){
@@ -69,13 +82,13 @@ function giveNumbering(dataArr){
 }
 
 function giveNumberingNonEmpty(dataArr){
-    // let lineNo = 1;
-    // for(let i = 0 ; i < dataArr.length ; i++){
-    //     if(dataArr.length>0){
-    //         dataArr [i] = lineNo + " " + dataArr[i];
-    //         lineNo++;
-    //     }
-    // }
+    let lineNo = 1;
+    for(let i = 0 ; i < dataArr.length ; i++){
+        if(dataArr[i] != '\r'){
+            dataArr [i] = lineNo + " " + dataArr[i];
+            lineNo++;
+        }
+    }
     return dataArr;
 }
 
